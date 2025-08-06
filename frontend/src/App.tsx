@@ -10,14 +10,16 @@ const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!clerkPubKey) throw new Error('Missing Clerk Publishable Key');
 
 function App() {
+  const frontendUrl = window.location.origin;
+  
   return (
     <ClerkProvider
       publishableKey={clerkPubKey}
-      afterSignOutUrl={window.location.origin}
-      signInFallbackRedirectUrl={window.location.origin}
-      signUpFallbackRedirectUrl={window.location.origin}
-      signInForceRedirectUrl={window.location.origin}
-      signUpForceRedirectUrl={window.location.origin}
+      afterSignOutUrl={frontendUrl}
+      signInFallbackRedirectUrl={`${frontendUrl}/register-newUser`}
+      signUpFallbackRedirectUrl={`${frontendUrl}/register-newUser`}
+      signInForceRedirectUrl={`${frontendUrl}/register-newUser`}
+      signUpForceRedirectUrl={`${frontendUrl}/register-newUser`}
       appearance={APP_CONFIG.clerk.appearance}
     >
       <ThemeProvider>

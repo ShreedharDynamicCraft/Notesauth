@@ -3,27 +3,22 @@
   "name": "notes-api-backend",
   "builds": [
     {
-      "src": "src/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["prisma/**"]
-      }
+      "src": "dist/index.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/index.ts"
+      "dest": "dist/index.js"
     }
   ],
   "env": {
     "NODE_ENV": "production"
   },
   "functions": {
-    "src/index.ts": {
+    "dist/index.js": {
       "maxDuration": 30
     }
-  },
-  "installCommand": "npm install && npx prisma generate",
-  "buildCommand": "npm run build"
+  }
 }

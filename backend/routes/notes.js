@@ -49,4 +49,33 @@ router.delete('/:id', authenticateUser, async (req, res) => {
   }
 });
 
+// PUT route for updating notes (including adding images)
+router.put('/:id', authenticateUser, async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    
+    const note = await Note.findOne({ _id: req.params.id, userId: req.userId });
+    
+    if (!note) {
+      return res.status(404).json({ error: 'Note not found' });
+    }
+
+    // Update the note with new data
+    const updatedNote = await Note.findByIdAndUpdate(
+      req.params.id,
+      { 
+        title: title || note.title,
+        content: content || note.content,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
+
+    res.json(updatedNote);
+  } catch (error) {
+    console.error('Update note error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

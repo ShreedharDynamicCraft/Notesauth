@@ -1,9 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* Dark mode root variables */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-primary: #e2e8f0;
+  --card-bg: #ffffff;
+  --note-bg: #ffffff;
+  --note-border: #e5e7eb;
+  --input-bg: #f9fafb;
+}
+
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-primary: #334155;
+  --card-bg: #1e293b;
+  --note-bg: #334155;
+  --note-border: #475569;
+  --input-bg: #374151;
+}
+
 /* Custom component classes - using traditional CSS with Tailwind CSS v4 */
 .gradient-bg {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+}
+
+.dark .gradient-bg {
+  background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
 }
 
 .glass-card {
@@ -50,7 +79,121 @@
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
+.dark .note-card-shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
 /* Rich Text Editor Styles */
+.rich-text-content {
+  background-color: var(--card-bg);
+  border-color: var(--border-primary);
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: scroll !important; /* Always show scrollbar */
+  overflow-x: hidden;
+  scrollbar-width: auto !important; /* Force Firefox to always show */
+  scrollbar-color: #94a3b8 #f1f5f9; /* For Firefox */
+  scrollbar-gutter: stable; /* Reserve space for scrollbar */
+}
+
+.rich-text-content .ProseMirror {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  outline: none;
+  white-space: pre-wrap;
+  padding: 16px !important;
+  min-height: calc(100% + 1px) !important; /* Force content to be slightly larger than container */
+  border-radius: 8px;
+  border: none !important;
+  box-sizing: border-box;
+  overflow: visible !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  /* Prevent scrollbar from disappearing */
+  scrollbar-width: auto !important;
+  position: relative;
+}
+
+.rich-text-content .ProseMirror p {
+  margin: 0 0 1em 0;
+}
+
+.rich-text-content .ProseMirror:empty::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+  font-style: italic;
+}
+
+/* Custom scrollbar styling */
+.rich-text-content::-webkit-scrollbar {
+  width: 14px !important;
+  background: transparent;
+  -webkit-appearance: none;
+  display: block !important; /* Force scrollbar to always show */
+}
+
+.rich-text-content::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin: 4px;
+  display: block !important;
+}
+
+.rich-text-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%) !important;
+  border-radius: 8px;
+  border: 2px solid #f1f5f9;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: block !important;
+  min-height: 20px; /* Ensure minimum thumb size */
+}
+
+.rich-text-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #64748b 0%, #475569 100%) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.rich-text-content::-webkit-scrollbar-thumb:active {
+  background: #475569 !important;
+}
+
+/* Dark mode scrollbar */
+.dark .rich-text-content::-webkit-scrollbar-track {
+  background: #374151 !important;
+  border-color: #4b5563;
+}
+
+.dark .rich-text-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6b7280 0%, #4b5563 100%) !important;
+  border-color: #374151;
+}
+
+.dark .rich-text-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%) !important;
+}
+
+/* Force scrollbar to always show */
+.rich-text-content {
+  overflow-y: scroll !important; /* This ensures scrollbar is always present */
+}
+
+.rich-text-content .ProseMirror {
+  overflow: visible !important;
+  min-height: calc(100% + 1px) !important; /* Force content to be slightly larger than container */
+}
+
+/* Ensure scrollbar is always visible by adding minimum content */
+.rich-text-content::after {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 100%;
+}
+
 .rich-text-content img {
   max-width: 100%;
   height: auto;
@@ -59,25 +202,211 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s;
+  display: block !important;
+  object-fit: cover;
+}
+
+.dark .rich-text-content img {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-primary);
 }
 
 .rich-text-content img:hover {
   transform: scale(1.02);
 }
 
-.rich-text-content .ProseMirror {
-  outline: none;
-  white-space: pre-wrap;
-}
-
 .rich-text-content .ProseMirror p.is-editor-empty:first-child::before {
-  color: #adb5bd;
+  color: var(--text-secondary);
   content: attr(data-placeholder);
   float: left;
   height: 0;
   pointer-events: none;
 }
 
+/* Note Content Styling */
+.note-content {
+  color: var(--text-primary);
+}
+
+.note-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 6px 0;
+  display: block !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dark .note-content img {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-primary);
+}
+
 .note-card-shadow:hover {
   box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Toast Styling */
+[data-sonner-toaster] [data-sonner-toast] {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+.dark [data-sonner-toaster] [data-sonner-toast] {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Alternative react-hot-toast styling */
+.react-hot-toast-custom {
+  background: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+.dark .react-hot-toast-custom {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhanced SSO Callback Animations */
+@keyframes animate-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: animate-spin-slow 20s linear infinite;
+}
+
+/* Floating particles animations */
+@keyframes float-1 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.4;
+  }
+  33% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.8;
+  }
+  66% {
+    transform: translateY(-10px) translateX(-5px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-2 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-30px) translateX(-15px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float-3 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translateY(-15px) translateX(20px);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translateY(-25px) translateX(-10px);
+    opacity: 0.4;
+  }
+}
+
+@keyframes float-4 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.6;
+  }
+  40% {
+    transform: translateY(-20px) translateX(-20px);
+    opacity: 0.9;
+  }
+  80% {
+    transform: translateY(-35px) translateX(5px);
+    opacity: 0.3;
+  }
+}
+
+@keyframes float-5 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.4;
+  }
+  60% {
+    transform: translateY(-25px) translateX(15px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float-6 {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-18px) translateX(-25px);
+    opacity: 0.8;
+  }
+  70% {
+    transform: translateY(-12px) translateX(8px);
+    opacity: 0.6;
+  }
+}
+
+.animate-float-1 {
+  animation: float-1 4s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-2 5s ease-in-out infinite;
+}
+
+.animate-float-3 {
+  animation: float-3 3.5s ease-in-out infinite;
+}
+
+.animate-float-4 {
+  animation: float-4 4.5s ease-in-out infinite;
+}
+
+.animate-float-5 {
+  animation: float-5 3s ease-in-out infinite;
+}
+
+.animate-float-6 {
+  animation: float-6 5.5s ease-in-out infinite;
+}
+
+/* Enhanced pulse animation for progress bar */
+@keyframes enhanced-pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-enhanced-pulse {
+  animation: enhanced-pulse 1.5s ease-in-out infinite;
 }

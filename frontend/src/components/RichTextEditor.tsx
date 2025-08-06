@@ -44,10 +44,8 @@ export const RichTextEditor = ({ content, onChange, placeholder, className }: Ri
     },
     editorProps: {
       attributes: {
-        class: `prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none p-4 ${
-          isFullscreen ? 'min-h-[70vh]' : 'min-h-[200px]'
-        }`,
-        placeholder: placeholder || 'Start typing...',
+        class: `focus:outline-none`,
+        'data-placeholder': placeholder || 'Start typing...',
       },
     },
   });
@@ -134,11 +132,11 @@ export const RichTextEditor = ({ content, onChange, placeholder, className }: Ri
       className={`${
         isFullscreen 
           ? 'fixed inset-0 z-50 bg-white flex flex-col p-4' 
-          : `border border-gray-200 rounded-lg overflow-hidden ${className}`
+          : `border border-gray-200 rounded-lg overflow-hidden flex flex-col ${className}`
       }`}
     >
       {/* Toolbar */}
-      <div className={`bg-gray-50 border-b border-gray-200 p-2 flex flex-wrap items-center gap-1 ${
+      <div className={`bg-gray-50 border-b border-gray-200 p-2 flex flex-wrap items-center gap-1 flex-shrink-0 ${
         isFullscreen ? 'shadow-sm' : ''
       }`}>
         {/* Text Formatting */}
@@ -400,10 +398,10 @@ export const RichTextEditor = ({ content, onChange, placeholder, className }: Ri
       </div>
 
       {/* Editor Content */}
-      <div className={`bg-white ${
-        isFullscreen ? 'flex-1 overflow-auto' : 'min-h-[200px]'
+      <div className={`bg-white flex-1 overflow-hidden ${
+        isFullscreen ? '' : ''
       }`}>
-        <div className="rich-text-content prose prose-sm max-w-none">
+        <div className="rich-text-content h-full overflow-y-scroll border-0 p-0">
           <EditorContent editor={editor} />
         </div>
       </div>

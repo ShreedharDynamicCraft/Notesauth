@@ -20,8 +20,8 @@ export const NoteForm = ({ onNoteCreated }: NoteFormProps) => {
     // Strip HTML tags for validation
     const textContent = content.replace(/<[^>]*>/g, '').trim();
     
-    if (!title.trim() || !textContent) {
-      toast.error('Please fill in both title and content');
+    if (!textContent) {
+      toast.error('Please add some content to your note');
       return;
     }
 
@@ -34,8 +34,25 @@ export const NoteForm = ({ onNoteCreated }: NoteFormProps) => {
         return;
       }
 
+      // Generate timestamp title if no title provided
+      let finalTitle = title.trim();
+      let showTimestampNotification = false;
+      
+      if (!finalTitle) {
+        const now = new Date();
+        finalTitle = now.toLocaleString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+        showTimestampNotification = true;
+      }
+
       const noteData: CreateNoteData = {
-        title: title.trim(),
+        title: finalTitle,
         content: content.trim()
       };
 
@@ -43,7 +60,16 @@ export const NoteForm = ({ onNoteCreated }: NoteFormProps) => {
       
       setTitle('');
       setContent('');
-      toast.success('Note created successfully');
+      
+      if (showTimestampNotification) {
+        toast.success('Note saved with timestamp title', {
+          duration: 4000,
+          icon: '⏰'
+        });
+      } else {
+        toast.success('Note created successfully');
+      }
+      
       onNoteCreated();
     } catch (error) {
       toast.error('Failed to create note');
@@ -53,35 +79,45 @@ export const NoteForm = ({ onNoteCreated }: NoteFormProps) => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-2xl note-card-shadow border border-gray-100">
-      <h3 className="text-xl font-semibold text-karbon-navy mb-6 tracking-tight">
+    <div className="p-6 rounded-2xl note-card-shadow transition-colors h-[480px] flex flex-col" style={{ 
+      backgroundColor: 'var(--card-bg)', 
+      border: '1px solid var(--border-primary)' 
+    }}>
+      <h3 className="text-xl font-semibold mb-4 tracking-tight transition-colors flex-shrink-0" style={{ 
+        color: 'var(--text-primary)' 
+      }}>
         Create New Note
       </h3>
       
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
+      <form onSubmit={handleSubmit} className="space-y-3 flex flex-col flex-1 min-h-0">
+        <div className="flex-shrink-0">
           <input
             type="text"
-            placeholder="Note title"
+            placeholder="Note title (optional - will use timestamp if empty)"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:border-karbon-blue focus:ring-0 focus:outline-none transition-colors bg-gray-50 focus:bg-white font-medium"
+            className="w-full px-4 py-3 border-2 rounded-xl focus:border-karbon-blue dark:focus:border-blue-400 focus:ring-0 focus:outline-none transition-colors font-medium"
+            style={{
+              backgroundColor: 'var(--input-bg)',
+              borderColor: 'var(--border-primary)',
+              color: 'var(--text-primary)'
+            }}
             disabled={isSubmitting}
           />
         </div>
         
-        <div>
+        <div className="flex-1 flex flex-col min-h-0">
           <RichTextEditor
             content={content}
             onChange={setContent}
             placeholder="Write your note content here..."
-            className="border-2 border-gray-200 rounded-xl focus-within:border-karbon-blue transition-colors"
+            className="border-2 rounded-xl focus-within:border-karbon-blue dark:focus-within:border-blue-400 transition-colors h-[300px]"
           />
         </div>
         
         <button 
           type="submit" 
-          className="w-full gradient-btn text-white py-3.5 px-6 rounded-xl font-semibold hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+          className="w-full gradient-btn text-white py-3 px-6 rounded-xl font-semibold hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex-shrink-0"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

@@ -3,16 +3,35 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import { notesApi, type Note } from '../services/api';
 import { EditNoteModal } from './EditNoteModal';
+import { useTheme } from '../contexts/ThemeContext';
 import toast from 'react-hot-toast';
 
 export const NoteDetailView = () => {
   const { noteId } = useParams<{ noteId: string }>();
   const navigate = useNavigate();
   const { getToken } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [note, setNote] = useState<Note | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleThemeToggle = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    toggleTheme();
+    
+    if (newTheme === 'dark') {
+      toast.success('Switched to dark mode', {
+        icon: '🌙',
+        duration: 3000,
+      });
+    } else {
+      toast.success('Switched to light mode', {
+        icon: '☀️',
+        duration: 3000,
+      });
+    }
+  };
 
   const fetchNote = async () => {
     if (!noteId) {
@@ -80,11 +99,15 @@ export const NoteDetailView = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-karbon-light">
+      <div className={`min-h-screen transition-colors duration-200 ${
+        theme === 'dark' ? 'bg-slate-900' : 'bg-karbon-light'
+      }`}>
         <div className="max-w-4xl mx-auto px-8 py-10">
           <div className="text-center py-16">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-karbon-blue"></div>
-            <p className="mt-4 text-lg font-medium text-karbon-gray">Loading note...</p>
+            <p className={`mt-4 text-lg font-medium ${
+              theme === 'dark' ? 'text-gray-300' : 'text-karbon-gray'
+            }`}>Loading note...</p>
           </div>
         </div>
       </div>
@@ -93,10 +116,14 @@ export const NoteDetailView = () => {
 
   if (!note) {
     return (
-      <div className="min-h-screen bg-karbon-light">
+      <div className={`min-h-screen transition-colors duration-200 ${
+        theme === 'dark' ? 'bg-slate-900' : 'bg-karbon-light'
+      }`}>
         <div className="max-w-4xl mx-auto px-8 py-10">
           <div className="text-center py-16">
-            <p className="text-xl text-karbon-gray">Note not found</p>
+            <p className={`text-xl ${
+              theme === 'dark' ? 'text-gray-300' : 'text-karbon-gray'
+            }`}>Note not found</p>
           </div>
         </div>
       </div>
@@ -105,7 +132,9 @@ export const NoteDetailView = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-karbon-light">
+      <div className={`min-h-screen transition-colors duration-200 ${
+        theme === 'dark' ? 'bg-slate-900' : 'bg-karbon-light'
+      }`}>
         {/* Header */}
         <div className="gradient-bg shadow-lg border-b border-karbon-slate">
           <div className="max-w-4xl mx-auto px-8 py-6">
@@ -121,6 +150,22 @@ export const NoteDetailView = () => {
               </button>
               
               <div className="flex items-center gap-3">
+                <button
+                  onClick={handleThemeToggle}
+                  className="p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white/90 hover:text-white transition-all"
+                  title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                >
+                  {theme === 'light' ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  )}
+                </button>
+                
                 <button
                   onClick={() => setIsEditModalOpen(true)}
                   className="flex items-center gap-2 bg-white/10 text-white px-4 py-2 rounded-lg hover:bg-white/20 transition-colors"
@@ -152,14 +197,17 @@ export const NoteDetailView = () => {
 
         {/* Note Content */}
         <div className="max-w-4xl mx-auto px-8 py-10">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div className="rounded-2xl shadow-lg border overflow-hidden" style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--border-primary)'
+          }}>
             {/* Note Header */}
-            <div className="p-8 border-b border-gray-100">
-              <h1 className="text-3xl font-bold text-karbon-navy mb-4 leading-tight">
+            <div className="p-8 border-b" style={{ borderColor: 'var(--border-primary)' }}>
+              <h1 className="text-3xl font-bold mb-4 leading-tight" style={{ color: 'var(--text-primary)' }}>
                 {note.title}
               </h1>
               
-              <div className="flex items-center justify-between text-sm text-gray-500">
+              <div className="flex items-center justify-between text-sm" style={{ color: 'var(--text-secondary)' }}>
                 <div className="flex items-center gap-4">
                   <span className="flex items-center gap-1">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,7 +251,8 @@ export const NoteDetailView = () => {
             <div className="p-8">
               <div className="prose prose-lg max-w-none">
                 <div 
-                  className="text-karbon-gray leading-relaxed"
+                  className="leading-relaxed note-content"
+                  style={{ color: 'var(--text-primary)' }}
                   dangerouslySetInnerHTML={{ __html: note.content }}
                 />
               </div>

@@ -4,7 +4,27 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Notes App - Fast & Secure</title>
+    
+    <!-- Aggressive performance optimizations for OAuth providers -->
+    <link rel="preconnect" href="https://accounts.google.com" crossorigin />
+    <link rel="preconnect" href="https://github.com" crossorigin />
+    <link rel="preconnect" href="https://www.linkedin.com" crossorigin />
+    <link rel="preconnect" href="https://clerk.com" crossorigin />
+    <link rel="preconnect" href="https://api.clerk.com" crossorigin />
+    
+    <!-- DNS prefetch for faster resolution -->
+    <link rel="dns-prefetch" href="//accounts.google.com" />
+    <link rel="dns-prefetch" href="//github.com" />
+    <link rel="dns-prefetch" href="//www.linkedin.com" />
+    <link rel="dns-prefetch" href="//clerk.com" />
+    <link rel="dns-prefetch" href="//api.clerk.com" />
+    
+    <!-- Preload critical OAuth endpoints -->
+    <link rel="preload" href="https://accounts.google.com/gsi/client" as="script" crossorigin />
+    
+    <!-- Resource hints for faster auth -->
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
   </head>
   <body>
     <div id="root"></div>

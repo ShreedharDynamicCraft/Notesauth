@@ -67,6 +67,12 @@ export const userService = {
     });
   },
 
+  async getUserByEmail(email: string) {
+    return await prisma.user.findUnique({
+      where: { email }
+    });
+  },
+
   async updateLastSignIn(id: string) {
     return await prisma.user.update({
       where: { id },

@@ -12,7 +12,9 @@ const PORT = process.env.PORT;
 // Configure CORS for production
 const corsOptions = {
   origin: [
-    '*',
+    'http://localhost:5173', // Development
+    'http://localhost:3000', // Alternative dev port
+    'https://notesauthapp-frontend.vercel.app', // Production frontend
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -47,6 +49,12 @@ app.get('/health', (req, res) => {
 app.use('/api/notes', notesRoutes);
 app.use('/api/user', userRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Only start server if not in Vercel serverless environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export the app for Vercel
+export default app;

@@ -9,6 +9,11 @@ import './App.css';
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 if (!clerkPubKey) throw new Error('Missing Clerk Publishable Key');
 
+// Warn about development keys in production
+if (clerkPubKey.includes('test') && window.location.hostname !== 'localhost') {
+  console.warn('⚠️ Using development Clerk keys in production. Please use production keys for live deployment.');
+}
+
 function App() {
   const frontendUrl = window.location.origin;
   

@@ -66,7 +66,7 @@ export const authenticateUser = async (
 
     // Fetch user data from Clerk API to get proper email and name
     const clerkUserData = await fetchClerkUserData(payload.sub);
-    console.log('Clerk user data:', JSON.stringify(clerkUserData, null, 2));
+// console.log('Clerk user data:', JSON.stringify(clerkUserData, null, 2));
     
     if (!clerkUserData) {
       console.log('Failed to fetch user data from Clerk');

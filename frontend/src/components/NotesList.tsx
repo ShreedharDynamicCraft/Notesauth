@@ -23,7 +23,7 @@ export const NotesList = ({ refreshTrigger, searchQuery }: NotesListProps) => {
   const MAX_PREVIEW_LENGTH = 120; // Characters to show in preview
 
   const truncateContent = (content: string, maxLength: number) => {
-    // Strip HTML tags for length calculation
+
     const textContent = content.replace(/<[^>]*>/g, '');
     if (textContent.length <= maxLength) return content;
     
@@ -51,16 +51,6 @@ export const NotesList = ({ refreshTrigger, searchQuery }: NotesListProps) => {
     }
     
     return truncated + '...';
-  };
-
-  const toggleExpanded = (noteId: string) => {
-    const newExpanded = new Set(expandedNotes);
-    if (newExpanded.has(noteId)) {
-      newExpanded.delete(noteId);
-    } else {
-      newExpanded.add(noteId);
-    }
-    setExpandedNotes(newExpanded);
   };
 
   const sortNotes = (notesToSort: Note[]) => {
@@ -175,7 +165,7 @@ export const NotesList = ({ refreshTrigger, searchQuery }: NotesListProps) => {
     );
   }
 
-  // Filter and sort notes
+  // filter and sort notes
   const filteredNotes = filterNotes(notes);
   const sortedNotes = sortNotes(filteredNotes);
 

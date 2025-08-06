@@ -42,6 +42,35 @@ export const getUserNotes = async (req: AuthenticatedRequest, res: Response) => 
   }
 };
 
+export const updateNote = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const userId = req.auth!.userId;
+    
+    if (!title || !content) {
+      return res.status(400).json({ error: 'Title and content are required' });
+    }
+    
+    const existingNote = await prisma.note.findFirst({
+      where: { id, userId }
+    });
+    
+    if (!existingNote) {
+      return res.status(404).json({ error: 'Note not found' });
+    }
+
+    const updatedNote = await prisma.note.update({
+      where: { id },
+      data: { title, content }
+    });
+
+    res.json(updatedNote);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 export const deleteNote = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;

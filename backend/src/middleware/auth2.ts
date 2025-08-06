@@ -16,32 +16,26 @@ export const authenticateUser = async (
     const token = req.headers.authorization?.replace('Bearer ', '');
     
     if (!token) {
-      console.log('No token provided');
       return res.status(401).json({ error: 'No token provided' });
     }
 
-    console.log('Token received, verifying...');
     const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log('Full token payload:', JSON.stringify(payload, null, 2));
     
     if (!payload.sub) {
-      console.log('Invalid token structure - no sub field');
       return res.status(401).json({ error: 'Invalid token structure' });
     }
 
-    console.log('Creating/updating user...');
     await userService.createOrUpdateUser({
       id: payload.sub,
-      email: payload.email || payload.email_addresses?.[0]?.email_address || `${payload.sub}@clerk.local`,
-      name: payload.name || payload.full_name || `${payload.first_name || ''} ${payload.last_name || ''}`.trim(),
-      firstName: payload.first_name || payload.given_name,
-      lastName: payload.last_name || payload.family_name,
-      imageUrl: payload.image_url || payload.picture,
+      email: payload.email || `${payload.sub}@clerk.local`,
+      name: payload.name,
+      firstName: payload.first_name,
+      lastName: payload.last_name,
+      imageUrl: payload.image_url,
       provider: payload.oauth_provider,
       providerId: payload.oauth_provider_id,
     });
     
-    console.log('User created/updated successfully');
     req.auth = { userId: payload.sub };
     next();
   } catch (error) {

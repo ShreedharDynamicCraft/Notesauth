@@ -8,10 +8,18 @@ datasource db {
 }
 
 model User {
-  id    String  @id
-  email String  @unique
-  name  String?
-  notes Note[]
+  id            String    @id
+  email         String    @unique
+  name          String?
+  firstName     String?
+  lastName      String?
+  imageUrl      String?
+  provider      String?
+  providerId    String?
+  lastSignedIn  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  notes         Note[]
 }
 
 model Note {
@@ -19,6 +27,7 @@ model Note {
   title     String
   content   String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

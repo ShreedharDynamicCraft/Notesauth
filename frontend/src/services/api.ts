@@ -1,6 +1,18 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://notesauth-kn8k.vercel.app';
+
+// Debug logging for environment variables
+console.log('🔍 API Service Configuration:', {
+  VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
+  Resolved_API_URL: API_BASE_URL,
+  NODE_ENV: import.meta.env.NODE_ENV,
+  MODE: import.meta.env.MODE
+});
+
+if (!import.meta.env.VITE_API_BASE_URL) {
+  console.warn('⚠️ VITE_API_BASE_URL not found in environment variables, using fallback URL');
+}
 
 const api = axios.create({
   baseURL: API_BASE_URL,

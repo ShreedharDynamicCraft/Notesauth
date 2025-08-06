@@ -7,6 +7,7 @@ import { APP_CONFIG } from './config/app';
 import './App.css';
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
 if (!clerkPubKey) throw new Error('Missing Clerk Publishable Key');
 
 // Warn about development keys in production

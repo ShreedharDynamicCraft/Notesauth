@@ -11,11 +11,7 @@ const app = express();
 
 // Configure CORS for production
 const corsOptions = {
-  origin: [
-    'http://localhost:5173', // Development
-    'http://localhost:3000', // Alternative dev port
-    'https://notesauthapp-frontend.vercel.app', // Production frontend
-  ],
+  origin: '*', // Allow all origins
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
